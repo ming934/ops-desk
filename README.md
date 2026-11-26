@@ -281,11 +281,14 @@ curl -X POST "http://localhost:9900/api/aiops" \
 ```
 
 ### 诊断流程
-```
-1. Planner 制定计划 → 生成 4-6 个诊断步骤
-2. Executor 执行步骤 → 调用 MCP 工具（日志查询、监控数据）
-3. Replanner 评估结果 → 决定继续/调整/生成报告
-4. 输出诊断报告 → 根因分析 + 运维建议
+```mermaid
+flowchart TD
+    A["用户启动诊断"] --> B["Planner 制定排查计划"]
+    B --> C["Executor 执行当前步骤"]
+    C -. "按需查询" .-> T["Prometheus 告警 / MCP 日志和监控 / 运维知识库"]
+    C --> D{"Replanner 评估结果"}
+    D -->|"继续或调整计划"| C
+    D -->|"生成报告"| E["输出告警分析与处理建议"]
 ```
 
 ## 📝 开发指南
